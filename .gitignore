@@ -1,0 +1,56 @@
+# === ARCHIVOS GLOBALES ===
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Dependencies
+**/node_modules/
+jspm_packages/
+
+# Environment variables
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# Build outputs
+**/build/
+**/dist/
+**/.next/
+**/.nuxt/
+
+# Cache directories
+**/.cache/
+**/.npm
+**/.rpt2_cache/
+**/.rts2_cache_*/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Package managers
+**/package-lock.json
+**/yarn.lock
+
+# === BACKEND ESPECÍFICO ===
+API-REST-DB/coverage/
+API-REST-DB/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# === FRONTEND ESPECÍFICO ===
+FRONT-REACT/coverage/
+FRONT-REACT/.eslintcache
