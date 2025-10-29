@@ -1,0 +1,169 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #bd1010);
+}
+
+.navbar-container {
+  width: min(80vw, 1200px);
+  margin: 24px auto 0;  
+  background-color: #e63905;         
+}
+
+.navbar {
+  top: 0px;
+  min-height: 64px;          
+  padding: 0.75rem 1.5rem;
+  background-color: #0a1b42;
+}
+
+.card {
+  padding: 2em;
+}
+
+.user-badge-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: .5rem 0;
+}
+
+/* Estilos para los badges de estado */
+.status-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.status-badge.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status-badge.inactive {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Posicionar boton a la derecha */
+.flex.justify-content-end {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end !important;
+}
+
+.user-badge{
+  position: static;
+  top: auto;
+  right: auto;
+  margin: 0;
+  text-align: left;        
+  z-index: 1100;
+  background: #EBBD3F;
+  color: #000000;
+  border: 1px solid #F7934C;
+  border-radius: 8px;
+  padding: 6px 10px;
+  min-width: 160px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+}
+
+
+/* Texto global */
+html, body, #root {
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #e7e9ee;          /* color de texto por defecto */
+  background: #1e1f29;     /* opcional: fondo global */
+}
+
+/* Encabezados un poco más claros */
+h1, h2, h3, h4, h5, h6 {
+  color: #f5f7fb;
+}
+
+/* Asegura el color en componentes PrimeReact */
+.p-component {
+  color: inherit;
+}
+
+
+
+/* Botón por defecto */
+.p-button {
+  margin: 0 0.5rem 0.5rem 0;
+  background: #EBAC3F;
+  border-color: #062469;
+  color: #000000;
+}
+.p-button:enabled:hover {
+  background: #F7B05B;
+  border-color: #F7B05B;
+}
+.p-button:enabled:active {
+  background: #FFC15E;
+  border-color: #FFC15E;
+}
+
+
+.p-button-success { background: #EBAC3F; border-color: #FFC15E; color:#000000; }
+.p-button-danger  { background: #ef4444; border-color: #ef4444; color:#fff; }
+.p-button-info    { background: #EBAC3F; border-color: #FFC15E; color:#000000; }
+
+.p-button-success:enabled:hover { background:#dc9625; border-color:#dc9625; }
+.p-button-danger:enabled:hover  { background:#A44A3F; border-color:#A44A3F; }
+.p-button-info:enabled:hover    { background:#dc9625; border-color:#dc9625; }
+
+/* Texto dentro del botón */
+.p-button .p-button-label {
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+
+
+/* Estilo básico para apilar campos y alinear texto a la izquierda */
+.product-form {
+  text-align: center;               /* anula el #root { text-align:center } */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;                      /* espacio entre cada campo */
+}
+
+/* etiqueta arriba y con un pequeño espacio */
+.product-form label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* separación extra entre los campos y los botones */
+.product-form .actions {
+  margin-top: 12px;
+}
+
+
+.page-content {
+  text-align: center;
+  padding: 0 20px 20px;  /* top = 0, solo laterales y abajo */
+}
+
+form, .product-form, .form-vertical { text-align: left; }
+
+.brand-badge {
+  font-size: 30px;
+}
+
+.pi {
+  font-size: 1.25em;  /* opcional: tamaño del ícono */
+}
