@@ -7,6 +7,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
+import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 
 const validationSchema = Yup.object({
   employeeId: Yup.number()
@@ -32,11 +33,12 @@ const validationSchema = Yup.object({
 
 export default function ScheduleRequestForm() {
   const { scheduleRequests, addScheduleRequest, editScheduleRequest } = useScheduleRequestContext();
-  const { schedules } = useScheduleContext(); 
-  const { employees } = useEmployeeContext(); 
+  const { schedules } = useScheduleContext();
+  const { employees } = useEmployeeContext();
   const { scheduleId, requestId, employeeId } = useParams(); // Parámetros específicos
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  
   // Determinar si es edición basado en requestId
   const existingScheduleRequest = requestId ? scheduleRequests.find((sr) => sr.id === Number(requestId)) : null;
   const isEdit = Boolean(existingScheduleRequest);
@@ -89,50 +91,64 @@ export default function ScheduleRequestForm() {
   }, [scheduleId, requestId, employeeId, scheduleRequests, schedules, isEdit, existingScheduleRequest, originalSchedule]);
 
   const handleSubmit = async (values, actions) => {
-    try {
-      if (requestId) {
-        await editScheduleRequest(requestId, values);
+    const executeSubmit = async () => {
+      try {
+        if (requestId) {
+          await editScheduleRequest(requestId, values);
+          toast.current?.show({
+            severity: "success",
+            summary: "Solicitud actualizada",
+            detail: "La solicitud de cambio de horario se actualizó correctamente",
+            life: 3000,
+          });
+        } else {
+          await addScheduleRequest(values);
+          toast.current?.show({
+            severity: "success",
+            summary: "Solicitud creada",
+            detail: "La solicitud de cambio de horario se creó correctamente",
+            life: 3000,
+          });
+        }
+        
+        // Delay navigation to show toast
+        setTimeout(() => {
+          const fromParam = searchParams.get('from');
+          if (fromParam === 'user-schedules') {
+            navigate('/solicitudes-horarios');
+          } else if (fromParam === 'schedules') {
+            navigate('/solicitudes-horarios');
+          } else {
+            navigate('/solicitudes-horarios');
+          }
+        }, 1500);
+      } catch (error) {
+        console.error("Error al procesar la solicitud:", error);
         toast.current?.show({
-          severity: "success",
-          summary: "Solicitud actualizada",
-          detail: "La solicitud de cambio de horario se actualizó correctamente",
-          life: 3000,
-        });
-      } else {
-        await addScheduleRequest(values);
-        toast.current?.show({
-          severity: "success",
-          summary: "Solicitud creada",
-          detail: "La solicitud de cambio de horario se creó correctamente",
+          severity: "error",
+          summary: "Error",
+          detail: error.message || "No se pudo procesar la solicitud",
           life: 3000,
         });
       }
-      
-      // Delay navigation to show toast
-      setTimeout(() => {
-        const fromParam = searchParams.get('from');
-        if (fromParam === 'user-schedules') {
-          navigate('/solicitudes-horarios');
-        } else if (fromParam === 'schedules') {
-          navigate('/solicitudes-horarios');
-        } else {
-          navigate('/solicitudes-horarios');
-        }
-      }, 1500);
-    } catch (error) {
-      console.error("Error al procesar la solicitud:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: error.message || "No se pudo procesar la solicitud",
-        life: 3000,
+    };
+
+    if (isEdit) {
+      confirmDialog({
+        message: '¿Está seguro que desea actualizar esta solicitud?',
+        header: 'Confirmar actualización',
+        icon: 'pi pi-exclamation-triangle',
+        accept: executeSubmit
       });
+    } else {
+      executeSubmit();
     }
   };
 
   return (
     <div className="p-d-flex p-flex-column p-align-center p-mt-3">
       <Toast ref={toast} />
+      <ConfirmDialog />
 
       <h2>{isEdit ? "Editar" : "Crear"} Solicitud de Horario</h2>
       <Formik
@@ -158,6 +174,7 @@ export default function ScheduleRequestForm() {
               type="date"
               className="p-inputtext p-component p-mb-3"
               placeholder="Fecha"
+              disabled={isEdit}
             />
             <ErrorMessage
               name="requestDate"
@@ -173,6 +190,7 @@ export default function ScheduleRequestForm() {
               type="time"
               className="p-inputtext p-component p-mb-3"
               placeholder="Hora de inicio (HH:MM)"
+              disabled={isEdit}
             />
             <ErrorMessage
               name="startTime"
@@ -188,6 +206,7 @@ export default function ScheduleRequestForm() {
               type="time"
               className="p-inputtext p-component p-mb-3"
               placeholder="Hora de fin (HH:MM)"
+              disabled={isEdit}
             />
             <ErrorMessage
               name="endTime"

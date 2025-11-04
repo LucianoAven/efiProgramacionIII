@@ -29,17 +29,11 @@ const forgotPassword = async (req, res) => {
         const user = await User.findOne({ where: { email } })
         if (!user) return res.status(400).json({ message: 'El usuario no existe' })
 
-        console.log("llego")
-
         const rawToken = crypto.randomBytes(32).toString('hex')
         const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex')
         const expiresAt = Date.now() + 15 * 60 * 1000
 
-        console.log("llego")
-
         resetTokens.set(user.id, { tokenHash, expiresAt })
-
-        console.log("llego", user.name)
 
         const resetUrl = `${process.env.FRONT_URL || 'http://localhost:5173'}/recuperar-contraseña?token=${rawToken}&id=${user.id}`
         await sendEmail({
@@ -47,8 +41,6 @@ const forgotPassword = async (req, res) => {
             subject: 'Recuperar contraseña',
             html: resetEmailTemplate({ name: user.name, resetUrl })
         })
-
-        console.log("llego")
 
         return res.status(200).json({
             message: 'Se ha enviado un correo con instrucciones para recuperar tu contraseña',

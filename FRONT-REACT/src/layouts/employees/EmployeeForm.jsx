@@ -29,7 +29,7 @@ export default function EmployeeForm() {
   const navigate = useNavigate();
   const [initialValues, setInitialValues] = useState({
     userId: id ? Number(id) : 0,
-    position: "",
+    position: "cajero",
     hiringDate: "",
     status: true,
   });

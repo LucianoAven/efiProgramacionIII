@@ -21,7 +21,7 @@
 .navbar-container {
   width: min(80vw, 1200px);
   margin: 24px auto 0;  
-  background-color: #e63905;         
+  background-color: rgb(223, 47, 3);         
 }
 
 .navbar {
@@ -166,4 +166,76 @@ form, .product-form, .form-vertical { text-align: left; }
 
 .pi {
   font-size: 1.25em;  /* opcional: tamaño del ícono */
+}
+
+/* Marco tipo cuadro para perfil */
+.profile-frame {
+  border: 3px solid orangered;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  max-width: 900px;
+  width: 100%;
+}
+
+/* Estilos específicos para HomeView - replicando los estilos inline */
+
+/* Contenedor principal del home */
+.home-main-container {
+  text-align: center;
+}
+
+/* Contenedor del navbar en home */
+.home-navbar-wrapper {
+  text-align: center;
+  padding: 0 20px 80px;
+}
+
+/* Toolbar del home */
+.home-toolbar {
+  background-color: #262731ff;
+  color: #fff;
+}
+
+/* Logo del toolbar */
+.home-logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.home-logo-icon {
+  font-size: 1.5rem;
+  color: orangered;
+  margin-right: 12px;
+}
+
+.home-logo-text {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+/* Botones del toolbar cuando hay usuario */
+.home-user-buttons {
+  display: flex;
+  gap: 0.25rem;
+}
+
+/* Botones del toolbar cuando no hay usuario */
+.home-guest-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Título principal del home */
+.home-main-title {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+/* Subtítulo del home */
+.home-subtitle {
+  font-weight: normal;
+  opacity: 0.8;
 }

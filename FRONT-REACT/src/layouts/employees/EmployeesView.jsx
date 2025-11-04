@@ -1,4 +1,5 @@
 import { useEmployeeContext } from '../../context/EmployeesContext';
+import { useScheduleContext } from '../../context/SchedulesContext';
 import { exportToPDF } from '../../utils/ExportToPdf';
 import { Link } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';  
@@ -7,12 +8,17 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 
 export default function EmployeesView() {
-  const { employees, deleteEmployee, loading, error, lazy, setLazy, total } = useEmployeeContext();
+  const { employees, deleteEmployee, loading, error, lazy, setLazy, total, getAllEmployees } = useEmployeeContext();
+  const { schedules } = useScheduleContext() || { schedules: [] };
 
-  // console.log('Empleados recibidos:', employees); // Temporal para debug
+  // Función para verificar si un empleado tiene horarios asignados
+  const hasSchedules = (employeeId) => {
+    return schedules && Array.isArray(schedules) && schedules.some(schedule => schedule.employeeId === employeeId);
+  };
 
-  const handleExport = () => {
-    const employeesFormatted = employees.map(emp => ({
+  const handleExport = async () => {
+    const allEmployees = await getAllEmployees();
+    const employeesFormatted = allEmployees.map(emp => ({
       nombre: emp.user?.name || 'Sin nombre',
       posicion: emp.position,
       fechaContratacion: new Date(emp.hiringDate).toLocaleDateString('es-ES')
@@ -22,28 +28,25 @@ export default function EmployeesView() {
 
   return (
     <div>
-      <h2>Lista de Empleados</h2>
+      <h2> <i className="pi pi-id-card" /> Lista de Empleados <i className="pi pi-id-card" /></h2>
       <div className="flex justify-content-between align-items-center mb-3">
         <div>
           <Link to="/">
             <Button label="Volver al inicio" icon="pi pi-home" className="p-button-rounded p-button-secondary mr-2" />
           </Link>
           <Button label="Exportar PDF" icon="pi pi-file-pdf" className="p-button-rounded p-button-warning" onClick={handleExport} />
+
+          <span>Buscar: </span>
+          <InputText 
+          value={lazy?.q}
+          onChange={(e)=> setLazy({...lazy, q: e.target.value, first:0, page:0})}
+          placeholder='Nombre del empleado'/>
         </div>
-        <Link to="/usuarios">
-          <Button label="Crear Empleado desde Usuarios" icon="pi pi-plus" className="p-button-rounded p-button-success" />
-        </Link>
       </div>
 
       {loading && <p>Cargando empleados...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      
-      <span>Buscar: </span>
-      <InputText 
-      value={lazy?.q}
-      onChange={(e)=> setLazy({...lazy, q: e.target.value, first:0, page:0})}
-      placeholder='Nombre del empleado'/>
-
+    
       <DataTable 
       value={Array.isArray(employees) ? employees : []} 
       paginator
@@ -76,22 +79,41 @@ export default function EmployeesView() {
         />
 
         <Column 
-          header="Acciones" 
+          header="Acciones"
+          headerStyle={{ textAlign: 'center' }}
+          bodyStyle={{ textAlign: 'center' }}
           body={(rowData) => (
-            <>
-              <Link to={`/horarios/crear/${rowData.id}`}>
-                <Button label="Asignar Horario" icon="pi pi-clock" className="p-button-rounded p-button-info mr-2" />
-              </Link>
+            <div className="flex justify-content-center align-items-center gap-2">
+              {!hasSchedules(rowData.id) ? (
+                <Link to={`/horarios/crear/${rowData.id}`}>
+                  <Button 
+                    label="Asignar Horario" 
+                    icon="pi pi-clock" 
+                    className="p-button-rounded p-button-info" 
+                    size="small" 
+                  />
+                </Link>
+              ) : (
+                <Button 
+                  label="Asignar Horario" 
+                  icon="pi pi-clock" 
+                  className="p-button-rounded p-button-secondary" 
+                  size="small" 
+                  disabled 
+                  title="Este empleado ya tiene horario asignado"
+                />
+              )}
               <Link to={`/empleados/editar/${rowData.id}`}>
-                <Button label="Editar" icon="pi pi-pencil" className="p-button-rounded p-button-info mr-2" />
+                <Button label="Editar" icon="pi pi-pencil" className="p-button-rounded p-button-info" size="small" />
               </Link>
               <Button 
                 label="Eliminar"
                 icon="pi pi-trash"
                 className="p-button-rounded p-button-danger"
+                size="small"
                 onClick={() => deleteEmployee(rowData.id)}
               />
-            </>
+            </div>
           )}
         />
       </DataTable>

@@ -20,7 +20,7 @@ export const exportToPDF = (data, title, columns) => {
   doc.setFontSize(10);
   doc.setTextColor(156, 163, 175); 
   doc.text(`Generado el ${fecha}`, 14, doc.internal.pageSize.height - 20);
-  doc.text("Hecho por Milena Sivit — 2025", 14, doc.internal.pageSize.height - 14);
+  doc.text("Hecho por Luciano Avendaño — 2025", 14, doc.internal.pageSize.height - 14);
 
   doc.save(`${title}.pdf`);
 };

@@ -16,18 +16,16 @@ const RegisterForm = () =>{
         name:'',
         email:'',
         password:'',
-        rol: ''  // Valor por defecto según el modelo
+        rol: 'empleado' 
     }
 
     const validationSchema= Yup.object({
         name: Yup.string().required('Campo requerido'),
         email: Yup.string().email('Email invalido').required('Campo requerido'),
-        password: Yup.string().min(6,'Minimo 6 caracteres').required('Campo requerido'),
-        rol: Yup.string().oneOf(['admin', 'empleado'], 'Rol inválido').required('Campo requerido')
+        password: Yup.string().min(6,'Minimo 6 caracteres').required('Campo requerido'),        
     })
 
     const onSubmit = async (values) =>{
-        console.log("llego");
         
         await register(values)
     }
@@ -37,7 +35,6 @@ const RegisterForm = () =>{
             <Formik initialValues={initialValues} validationSchema={validationSchema}
             onSubmit={onSubmit}>
                 {({handleChange, values, setFieldValue})=>(
-                    console.log(values),
                     
                     <Form>
                         <label>Nombre</label>
@@ -54,16 +51,16 @@ const RegisterForm = () =>{
 
                         <label>Rol</label>
                         <Field as="select" name="rol">
-                            <option value="">Seleccione un rol</option>
-                            <option value="admin">Admin</option>
                             <option value="empleado">Empleado</option>
                         </Field>
                         <span><ErrorMessage name='rol'/></span>
 
-                        <Button label="Registrarse" type='submit'/>
-                        <Link to="/">
-                            <Button label="Volver al inicio" icon="pi pi-home" className="p-button-rounded p-button-secondary" />
-                        </Link>                        
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
+                            <Button label="Registrarse" icon="pi pi-user-plus" type='submit' className="p-button-rounded p-button-secondary" />
+                            <Link to="/">
+                                <Button label="Volver al inicio" icon="pi pi-home" className="p-button-rounded p-button-secondary" />
+                            </Link>
+                        </div>                        
                     </Form>
                 )}
             </Formik>

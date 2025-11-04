@@ -23,7 +23,6 @@ export const EmployeeProvider = ({ children }) => {
             const limit = lazy.rows
             const q = lazy.q || ''
             const { data: response } = await employeesService.listPaged({page, limit, q});
-            console.log("Respuesta empleados:", response);
             setEmployees(Array.isArray(response.data) ? response.data : []);
             setTotal(Number(response?.total || 0))
         } catch (e) {
@@ -78,6 +77,18 @@ export const EmployeeProvider = ({ children }) => {
         }
     };
 
+    const getAllEmployees = async () => {
+        try {
+            // Usamos listPaged con un límite muy alto para obtener todos los empleados
+            const { data: response } = await employeesService.listPaged({ page: 1, limit: 10000, q: '' });
+            const result = Array.isArray(response.data) ? response.data : [];
+            return result;
+        } catch (e) {
+            console.error('Error al obtener todos los empleados:', e);
+            return [];
+        }
+    };
+
 
     return (
         <EmployeeContext.Provider
@@ -89,6 +100,7 @@ export const EmployeeProvider = ({ children }) => {
                 addEmployee,
                 editEmployee,
                 deleteEmployee,
+                getAllEmployees,
                 total,
                 lazy,
                 setLazy,

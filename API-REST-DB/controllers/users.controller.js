@@ -51,7 +51,8 @@ const login = async (req, res) => {
             id: userExist.id,
             name: userExist.name,
             email: userExist.email,
-            rol: userExist.rol
+            rol: userExist.rol,
+            is_active: userExist.is_active
         }
 
         const token = jwt.sign({ user: user }, 'secreto1234', { expiresIn: '1h' })
@@ -82,7 +83,7 @@ const getProfile = async (req, res) => {
         const { Employee, Schedule } = require('../models');
         
         const usuario = await User.findByPk(userId, {
-            attributes: ['id', 'name', 'email', 'rol'], // Excluimos el password por seguridad
+            attributes: ['id', 'name', 'email', 'rol', 'is_active'], // Excluimos el password por seguridad
             include: [
                 {
                     model: Employee,

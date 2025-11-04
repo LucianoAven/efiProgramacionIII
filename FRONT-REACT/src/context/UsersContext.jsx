@@ -14,7 +14,6 @@ export const UserProvider = ({ children }) => {
         setLoading(true);
         try {
             const { data: response } = await usersService.list();
-            console.log("Respuesta usuarios:", response);
             setUsers(Array.isArray(response.data) ? response.data : []);
         } catch (e) {
             setError(e.message);
@@ -28,7 +27,6 @@ export const UserProvider = ({ children }) => {
         setLoading(true);
         try {
             const { data: response } = await usersService.getProfile();
-            console.log("Respuesta perfil usuario:", response);
             if (response?.data) {
                 setCurrentUser(response.data);
             }

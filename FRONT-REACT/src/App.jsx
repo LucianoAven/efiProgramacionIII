@@ -46,7 +46,9 @@ function App() {
                     <UserProvider>
                       <EmployeeProvider>
                         <ScheduleProvider>
+                          <ScheduleRequestProvider>
                           <UserRoutes />
+                          </ScheduleRequestProvider>
                         </ScheduleProvider>
                       </EmployeeProvider>
                     </UserProvider>
@@ -58,7 +60,9 @@ function App() {
                 element={
                   <PrivateRoute>
                     <EmployeeProvider>
-                      <EmployeeRoutes />
+                      <ScheduleProvider>
+                        <EmployeeRoutes />
+                      </ScheduleProvider>
                     </EmployeeProvider>
                   </PrivateRoute>
                 }

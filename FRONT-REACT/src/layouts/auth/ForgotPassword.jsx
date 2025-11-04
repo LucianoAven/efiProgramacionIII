@@ -5,11 +5,13 @@ import * as Yup from 'yup'
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Card } from "primereact/card";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () =>{
 
     const {forgotPassword} = useContext(AuthContext)
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
     const ForgotSchema = Yup.object({
         email: Yup.string().email("Email invalido").required('El email es obligatorio')
@@ -44,7 +46,15 @@ const ForgotPassword = () =>{
                     icon={loading ? "pi pi-spin pi-spinner" : 'pi pi-send'}
                     />
                 </Form>
+
             </Formik>
+
+            <Button
+            label="Volver"
+            className="p-button-secondary p-button-rounded"
+            onClick={() => navigate("/")}
+            type="button"
+            />            
 
         </Card>
     )
