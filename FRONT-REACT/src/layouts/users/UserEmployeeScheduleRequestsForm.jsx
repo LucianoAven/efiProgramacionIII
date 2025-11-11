@@ -3,6 +3,9 @@ import * as Yup from "yup";
 import { useScheduleRequestContext } from "../../context/ScheduleRequestsContext"; 
 import { useScheduleContext } from "../../context/SchedulesContext";
 import { useEmployeeContext } from "../../context/EmployeesContext";
+import { useUserContext } from "../../context/UsersContext";
+import { AuthContext } from "../../context/AuthContext";
+import { useContext } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { Button } from "primereact/button";
@@ -30,10 +33,12 @@ const validationSchema = Yup.object({
 });
 
 
-export default function ScheduleRequestForm() {
+export default function UserEmployeeScheduleRequestForm() {
   const { scheduleRequests, addScheduleRequest, editScheduleRequest } = useScheduleRequestContext();
   const { schedules } = useScheduleContext(); 
-  const { employees } = useEmployeeContext(); 
+  const { employees } = useEmployeeContext();
+  const { currentUser } = useUserContext(); // Obtener usuario actual con datos de empleado
+  const { user } = useContext(AuthContext); // Obtener usuario logueado
   const { scheduleId, requestId, employeeId } = useParams(); // Parámetros específicos
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -58,6 +63,17 @@ export default function ScheduleRequestForm() {
   const toast = useRef(null);
 
   useEffect(() => {
+    
+    // No hacer nada si no hay usuario o datos del perfil
+    if (!user || !currentUser) {
+      return;
+    }
+    
+    // Obtener el empleado del usuario actual desde currentUser.employees
+    const currentEmployee = currentUser.employees && currentUser.employees.length > 0 
+      ? currentUser.employees[0] 
+      : null;
+
     if (isEdit && existingScheduleRequest) {
       // Editando una solicitud existente
       setInitialValues({
@@ -76,19 +92,39 @@ export default function ScheduleRequestForm() {
         endTime: originalSchedule.endTime || "",
         status: "pendiente",
       });
-    } else if (employeeId) {
-      // Creando una solicitud para un empleado específico (sin horario base)
+    } else {
+      // Creando una nueva solicitud para el empleado logueado
       setInitialValues({
-        employeeId: Number(employeeId),
-        requestDate: new Date().toISOString().split('T')[0], // Fecha actual
+        employeeId: currentEmployee?.id || 0, // Usar el ID del empleado, no del usuario
+        requestDate: new Date().toISOString().split('T')[0],
         startTime: "",
         endTime: "",
         status: "pendiente",
       });
     }
-  }, [scheduleId, requestId, employeeId, scheduleRequests, schedules, isEdit, existingScheduleRequest, originalSchedule]);
+  }, [user, currentUser, scheduleId, requestId, employeeId, scheduleRequests, schedules, isEdit, existingScheduleRequest, originalSchedule]);
 
   const handleSubmit = async (values, actions) => {
+    // Validaciones adicionales
+    if (!values.employeeId || values.employeeId === 0) {
+      toast.current?.show({
+        severity: "error",
+        summary: "Error",
+        detail: "No se pudo identificar el empleado. Por favor, recarga la página.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // Formatear datos para envío
+    const formattedValues = {
+      employeeId: Number(values.employeeId),
+      requestDate: values.requestDate,
+      startTime: values.startTime,
+      endTime: values.endTime,
+      status: values.status
+    };
+
     try {
       if (requestId) {
         await editScheduleRequest(requestId, values);
@@ -99,7 +135,7 @@ export default function ScheduleRequestForm() {
           life: 3000,
         });
       } else {
-        await addScheduleRequest(values);
+        await addScheduleRequest(formattedValues);
         toast.current?.show({
           severity: "success",
           summary: "Solicitud creada",
@@ -110,14 +146,7 @@ export default function ScheduleRequestForm() {
       
       // Delay navigation to show toast
       setTimeout(() => {
-        const fromParam = searchParams.get('from');
-        if (fromParam === 'user-schedules') {
-          navigate('/solicitudes-horarios');
-        } else if (fromParam === 'schedules') {
-          navigate('/solicitudes-horarios');
-        } else {
-          navigate('/solicitudes-horarios');
-        }
+          navigate('/usuarios/empleado/solicitudes-horarios');
       }, 1500);
     } catch (error) {
       console.error("Error al procesar la solicitud:", error);
@@ -144,121 +173,113 @@ export default function ScheduleRequestForm() {
 
         {({ validateForm, submitForm, setTouched, isSubmitting }) => (
 
-        <Form
-          className="scheduleRequest-form"
-          style={{ width: "100%", maxWidth: "400px" }}
-        >
-          {/* Campo oculto para employeeId */}
-          <Field name="employeeId" type="hidden" />
+        <div className="profile-frame">
 
-          <div>
-            <label>Fecha:</label>
-            <Field
-              name="requestDate"
-              type="date"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Fecha"
-            />
-            <ErrorMessage
-              name="requestDate"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+          <Form
+            className="custom-form"
+          >
+            {/* Campo oculto para employeeId */}
+            <Field name="employeeId" type="hidden" />
 
-          <div>
-            <label>Hora de inicio:</label>
-            <Field
-              name="startTime"
-              type="time"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Hora de inicio (HH:MM)"
-            />
-            <ErrorMessage
-              name="startTime"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+            <div>
+              <label>Fecha:</label>
+              <Field
+                name="requestDate"
+                type="date"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Fecha"
+              />
+              <ErrorMessage
+                name="requestDate"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
 
-          <div>
-            <label>Hora de fin:</label>
-            <Field
-              name="endTime"
-              type="time"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Hora de fin (HH:MM)"
-            />
-            <ErrorMessage
-              name="endTime"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+            <div>
+              <label>Hora de inicio:</label>
+              <Field
+                name="startTime"
+                type="time"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Hora de inicio (HH:MM)"
+              />
+              <ErrorMessage
+                name="startTime"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
 
-          <div>
-            <label>Estado:</label>
-            <Field
-              name="status"
-              as="select"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Estado"
-            >
-              <option value="">Seleccione un estado</option>
-              <option value="pendiente">Pendiente</option>
-              <option value="aprobado">Aprobado</option>
-              <option value="rechazado">Rechazado</option>
-            </Field>
-            <ErrorMessage
-              name="status"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>          
+            <div>
+              <label>Hora de fin:</label>
+              <Field
+                name="endTime"
+                type="time"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Hora de fin (HH:MM)"
+              />
+              <ErrorMessage
+                name="endTime"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
 
-          <div className="p-d-flex p-gap-3">
-            <Button
-              type="button"
-              label={isEdit ? "Actualizar" : "Crear"}
-              className="p-button-success p-button-rounded"
-              disabled={isSubmitting}
-              onClick={async () => {
-                const errors = await validateForm();
-                if (Object.keys(errors).length) {
-                  // marca todo como "tocado" para que se muestren mensajes de validación
-                  setTouched(
-                    Object.keys(errors).reduce((acc, k) => ({ ...acc, [k]: true }), {}),
-                    true
-                  );
-                  toast.current?.show({
-                    severity: "error",
-                    summary: "Datos inválidos",
-                    detail: "Revisa los campos marcados en el formulario",
-                    life: 2500,
-                  });
-                  return;
-                }
-                await submitForm();
-              }}
-            />              
+            <div>
+              <label>Estado:</label>
+              <Field
+                name="status"
+                as="select"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Estado"
+              >
+                <option value="pendiente">Pendiente</option>
+              </Field>
+              <ErrorMessage
+                name="status"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>          
 
-            <Button
-              label="Volver"
-              className="p-button-secondary p-button-rounded"
-              onClick={() => {
-                const fromParam = searchParams.get('from');
-                if (fromParam === 'user-schedules') {
+            <div className="custom-btn-group">
+              <Button
+                type="button"
+                label={isEdit ? "Actualizar" : "Crear"}
+                className="p-button-success p-button-rounded"
+                disabled={isSubmitting}
+                onClick={async () => {
+                  const errors = await validateForm();
+                  if (Object.keys(errors).length) {
+                    // marca todo como "tocado" para que se muestren mensajes de validación
+                    setTouched(
+                      Object.keys(errors).reduce((acc, k) => ({ ...acc, [k]: true }), {}),
+                      true
+                    );
+                    toast.current?.show({
+                      severity: "error",
+                      summary: "Datos inválidos",
+                      detail: "Revisa los campos marcados en el formulario",
+                      life: 2500,
+                    });
+                    return;
+                  }
+                  await submitForm();
+                }}
+              />
+              <Button
+                label="Volver"
+                className="p-button-secondary p-button-rounded"
+                onClick={() => {
                   navigate('/usuarios/empleado/horarios');
-                } else if (fromParam === 'schedules') {
-                  navigate('/horarios');
-                } else {
-                  navigate('/solicitudes-horarios');
-                }
-              }}
-              type="button"
-            />
-          </div>
-        </Form>
+                }}
+                type="button"
+              />
+            </div>
+          </Form>
+
+        </div>
       )}
       </Formik>
     </div>

@@ -52,9 +52,9 @@ export default function UserRoutes() {
           <UserEmployeeScheduleRequests />
         </RequireRole>
       } />
-
-      <Route path="/crear-empleado/:employeeId" element={
-        <RequireRole roles={['empleado']}>
+ 
+      <Route path="/empleado/solicitudes-horarios/crear/:scheduleId" element={
+        <RequireRole roles={['admin', 'empleado']}>
           <UserEmployeeScheduleRequestsForm />
         </RequireRole>
       } />

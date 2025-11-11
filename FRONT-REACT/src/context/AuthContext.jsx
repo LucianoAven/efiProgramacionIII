@@ -21,7 +21,8 @@ export const AuthProvider = ({children}) =>{
                 id: decoded.user.id,
                 name: decoded.user.name,
                 email: decoded.user.email,
-                rol: decoded.user.rol
+                rol: decoded.user.rol,
+                is_active: decoded.user.is_active
             }
         } catch {
             return null

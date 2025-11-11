@@ -12,7 +12,6 @@ export const ScheduleRequestProvider = ({ children }) => {
         setLoading(true);
         try {
             const { data: response } = await scheduleRequestsService.list();
-            console.log("Respuesta solicitud horarios:", response);
             setScheduleRequests(Array.isArray(response.data) ? response.data : []);
         } catch (e) {
             setError(e.message);
@@ -36,14 +35,11 @@ export const ScheduleRequestProvider = ({ children }) => {
 
 
     const editScheduleRequest = async (id, updated) => {
-        console.log('Editando solicitud:', { id, updated });
         setLoading(true);
         try {
-            const { data: response } = await scheduleRequestsService.update(id, updated);
-            // Ahora response.data debería incluir la información completa del empleado
-            setScheduleRequests(prev =>
-                prev.map(u => (u.id === id ? response.data : u))
-            );
+            await scheduleRequestsService.update(id, updated);
+            // Recargamos todos los datos para asegurar que se vean los cambios
+            await getScheduleRequests();
         } catch (e) {
             setError(e.message);
         } finally {

@@ -27,7 +27,7 @@ export default function ScheduleRequestsView() {
         detail: msg.detail,
         life: msg.life ?? 3000
       });
-      // limpiar el state para no repetir el toast al navegar atrás
+      // Limpiar el state para no repetir el toast al navegar atrás/adelante
       navigate(location.pathname, { replace: true, state: null });
     }
   }, [location, navigate]);
@@ -36,7 +36,7 @@ export default function ScheduleRequestsView() {
     <div>
       <Toast ref={toast} />
 
-      <h2><i className="pi pi-box" /> Lista de Solicitudes de Horario <i className="pi pi-box" /></h2>
+      <h2><i className="pi pi-calendar-plus" /> Lista de Solicitudes de Horario <i className="pi pi-calendar-plus" /></h2>
 
       <div className="flex justify-content-end align-items-center mb-3">
         <Link to="/">
@@ -65,7 +65,7 @@ export default function ScheduleRequestsView() {
             body={(rowData) => (
               <>
                 <Link to={`/solicitudes-horarios/editar/${rowData.id}`}>
-                  <Button label="Editar" icon="pi pi-pencil" className="p-button-rounded p-button-info mr-2" />
+                  <Button label="Editar Estado" icon="pi pi-pencil" className="p-button-rounded p-button-info mr-2" />
                 </Link>
               </>
             )}

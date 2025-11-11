@@ -14,7 +14,7 @@ export default function UsersView() {
 
   return (
       <div className="flex flex-column">
-        <h2>👤 Lista de Usuarios 👤</h2>
+        <h2> <i className='pi pi-users' /> Lista de Usuarios <i className='pi pi-users' /> </h2>
         <div className="flex justify-content-end align-items-center mb-3">
           <Link to="/">
             <Button label="Volver al inicio" icon="pi pi-home" className="p-button-rounded p-button-secondary" />
@@ -41,9 +41,11 @@ export default function UsersView() {
           header="Acciones" 
           body={(rowData) => (
             <>
+            {rowData.employees && rowData.employees.length === 0 && (
               <Link to={`/empleados/crear/${rowData.id}`}>
-                <Button label="Alta" icon="pi pi-eye" className="p-button-rounded p-button-info mr-2" />
+                <Button label="Alta Empleado" icon="pi pi-eye" className="p-button-rounded p-button-info mr-2" />
               </Link>
+            )}
               <Link to={`/usuarios/editar/${rowData.id}`}>
                 <Button label="Editar rol/estado" icon="pi pi-pencil" className="p-button-rounded p-button-info mr-2" />
               </Link>

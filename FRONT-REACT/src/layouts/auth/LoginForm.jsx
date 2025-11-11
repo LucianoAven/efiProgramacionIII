@@ -41,8 +41,8 @@ const LoginForm = () =>{
                     <label>Contraseña</label> 
                     <Password name='password' value={values.password} onChange={handleChange}/>
                     <span className="text-danger"> <ErrorMessage name='password' /> </span>
-                    
-                    <Button label='Iniciar sesion' type='submit'/>
+
+                    <Button label='Iniciar sesion' icon="pi pi-sign-in" type='submit'/>
 
                 </Form>
             )}

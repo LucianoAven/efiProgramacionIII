@@ -41,10 +41,18 @@ export default function SchedulesView() {
     }
   }, [location, navigate]);
 
-  // Cargar horarios inicialmente
+  // Cargar horarios inicialmente y filtrar los que no tienen información completa del empleado cuando se busca por nombre
   useEffect(() => {
-    setFilteredSchedules(schedules);
-  }, [schedules]);
+    if (employeeName.trim()) {
+      // Si hay filtro por nombre, solo mostrar horarios con información completa del empleado
+      const filteredResults = schedules.filter(schedule => 
+        schedule.employee?.user?.name
+      );
+      setFilteredSchedules(filteredResults);
+    } else {
+      setFilteredSchedules(schedules);
+    }
+  }, [schedules, employeeName]);
 
   // Función para aplicar filtros
   const applyFilters = () => {
@@ -75,7 +83,7 @@ export default function SchedulesView() {
       await deleteSchedule(id);
       toast.current?.show({
         severity: 'success',
-        summary: 'Producto eliminado',
+        summary: 'Horario eliminado',
         detail: `Se eliminó el horario del empleado con ID "${employeeId}"`,
         life: 2500
       });
@@ -91,7 +99,7 @@ export default function SchedulesView() {
 
   const handleExport = () => {
     // Preparar los datos con nombres de columnas en español y datos procesados
-    const pdfData = schedules.map(schedule => ({
+    const pdfData = filteredSchedules.map(schedule => ({
       'Nombre del Empleado': schedule.employee?.user?.name || `Empleado ID: ${schedule.employeeId}`,
       'Fecha': schedule.date,
       'Hora de Inicio': schedule.startTime,
@@ -106,36 +114,34 @@ export default function SchedulesView() {
     <div>
       <Toast ref={toast} />
 
-      <h2><i className="pi pi-box" /> Lista de Horarios <i className="pi pi-box" /></h2>
+      <h2><i className="pi pi-clock" /> Lista de Horarios <i className="pi pi-clock" /></h2>
 
       {/* Filtros */}
-      <div className="p-card p-shadow-2 mb-4">
+      <div className="p-card p-shadow-2" style={{ marginBottom: '1rem' }}>
         <div className="p-card-body">
-          <h5>Filtros</h5>
-          <div className="p-grid p-formgrid">
-            <div className="p-col-12 p-md-4">
-              <label htmlFor="employeeName" className="p-d-block p-mb-2">Nombre del Empleado:</label>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-end', justifyContent: 'center' }}>
+            <h4>Buscar por:</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', minWidth: '250px' }}>
               <InputText
                 id="employeeName"
                 value={employeeName}
                 onChange={(e) => setEmployeeName(e.target.value)}
-                placeholder="Escriba el nombre del empleado"
-                className="w-full"
+                placeholder="Nombre del empleado"
+                style={{ width: '250px' }}
               />
             </div>
-            <div className="p-col-12 p-md-4">
-              <label htmlFor="filterDate" className="p-d-block p-mb-2">Fecha:</label>
+            <div style={{ display: 'flex', flexDirection: 'column', minWidth: '200px' }}>
               <Calendar
                 id="filterDate"
                 value={filterDate}
                 onChange={(e) => setFilterDate(e.value)}
                 dateFormat="dd/mm/yy"
-                placeholder="Seleccione una fecha"
-                className="w-full"
+                placeholder="Fecha"
+                style={{ width: '200px' }}
                 showIcon
               />
             </div>
-            <div className="p-col-12 p-md-4 flex align-items-end gap-2">
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
               <Button 
                 label="Aplicar Filtros" 
                 icon="pi pi-search" 
@@ -165,7 +171,7 @@ export default function SchedulesView() {
       {loading && <p>Cargando horarios...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <DataTable value={Array.isArray(schedules) ? schedules : []} paginator={false} className="p-datatable-sm p-shadow-2 mt-4">
+      <DataTable value={Array.isArray(filteredSchedules) ? filteredSchedules : []} paginator={false} className="p-datatable-sm p-shadow-2 mt-4">
         <Column 
           header="Nombre del Empleado" 
           body={(rowData) => rowData.employee?.user?.name || `Empleado ID: ${rowData.employeeId}`} 
@@ -182,7 +188,7 @@ export default function SchedulesView() {
             body={(rowData) => (
               <>
                 <Link to={`/solicitudes-horarios/crear-desde-horario/${rowData.id}?from=schedules`}>
-                  <Button label="Cambiar Horario" icon="pi pi-clock" className="p-button-rounded p-button-info mr-2" />
+                  <Button label="Nuevo Horario" icon="pi pi-clock" className="p-button-rounded p-button-info mr-2" />
                 </Link>
                 <Link to={`/horarios/editar/${rowData.id}`}>
                   <Button label="Editar" icon="pi pi-pencil" className="p-button-rounded p-button-info mr-2" />
