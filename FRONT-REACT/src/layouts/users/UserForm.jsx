@@ -68,45 +68,23 @@ export default function UserForm() {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
+
+      <div className="profile-frame">
+
         <Form
-          className="p-d-flex p-flex-column p-gap-3"
+          className="custom-form"
           style={{ width: "100%", maxWidth: "400px" }}
         >
           <div>
             <label>Nombre: {user.name}</label>
-            {/* 
-            <Field
-              name="name"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Nombre del usuario"
-            />
-            <ErrorMessage
-              name="name"
-              component="div"
-              className="p-text-danger"
-            />
-            */}
           </div>
 
           <div>
             <label>Email: {user.email}</label>
-            {/* 
-            <Field
-              name="email"
-              type="email"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="email del usuario"
-            />
-            <ErrorMessage
-              name="email"
-              component="div"
-              className="p-text-danger"
-            />
-           */}            
           </div>
 
           <div>
-            <label>Rol</label>
+            <label>Rol: </label>
             <Field as="select" name="rol">
                 <option value="admin">Admin</option>
                 <option value="empleado">Empleado</option>
@@ -119,7 +97,7 @@ export default function UserForm() {
           </div>          
 
           <div>
-            <label>Estado</label>
+            <label>Estado: </label>
             <Field as="select" name="is_active">
                 <option value={true}>Activo</option>
                 <option value={false}>Inactivo</option>
@@ -131,7 +109,7 @@ export default function UserForm() {
             />
           </div>
 
-          <div className="p-d-flex p-gap-3">
+          <div className="custom-btn-group">
             <Button
               type="submit"
               label="Actualizar"
@@ -145,6 +123,8 @@ export default function UserForm() {
             />
           </div>
         </Form>
+
+      </div>      
       </Formik>
     </div>
   );

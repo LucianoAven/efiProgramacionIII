@@ -239,3 +239,23 @@ form, .product-form, .form-vertical { text-align: left; }
   font-weight: normal;
   opacity: 0.8;
 }
+
+/* Formulario de solicitud de horario personalizado */
+.custom-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+.custom-form label {
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.custom-btn-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}

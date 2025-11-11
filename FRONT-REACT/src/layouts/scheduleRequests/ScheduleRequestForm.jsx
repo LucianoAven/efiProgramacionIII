@@ -160,124 +160,127 @@ export default function ScheduleRequestForm() {
 
         {({ validateForm, submitForm, setTouched, isSubmitting }) => (
 
-        <Form
-          className="scheduleRequest-form"
-          style={{ width: "100%", maxWidth: "400px" }}
-        >
-          {/* Campo oculto para employeeId */}
-          <Field name="employeeId" type="hidden" />
+        <div className="profile-frame">
 
-          <div>
-            <label>Fecha:</label>
-            <Field
-              name="requestDate"
-              type="date"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Fecha"
-              disabled={isEdit}
-            />
-            <ErrorMessage
-              name="requestDate"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+          <Form
+            className="custom-form"
+          >
+            {/* Campo oculto para employeeId */}
+            <Field name="employeeId" type="hidden" />
 
-          <div>
-            <label>Hora de inicio:</label>
-            <Field
-              name="startTime"
-              type="time"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Hora de inicio (HH:MM)"
-              disabled={isEdit}
-            />
-            <ErrorMessage
-              name="startTime"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+            <div>
+              <label>Fecha: </label>
+              <Field
+                name="requestDate"
+                type="date"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Fecha"
+                disabled={isEdit}
+              />
+              <ErrorMessage
+                name="requestDate"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
 
-          <div>
-            <label>Hora de fin:</label>
-            <Field
-              name="endTime"
-              type="time"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Hora de fin (HH:MM)"
-              disabled={isEdit}
-            />
-            <ErrorMessage
-              name="endTime"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+            <div>
+              <label>Hora de inicio: </label>
+              <Field
+                name="startTime"
+                type="time"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Hora de inicio (HH:MM)"
+                disabled={isEdit}
+              />
+              <ErrorMessage
+                name="startTime"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
 
-          <div>
-            <label>Estado:</label>
-            <Field
-              name="status"
-              as="select"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Estado"
-            >
-              <option value="">Seleccione un estado</option>
-              <option value="pendiente">Pendiente</option>
-              <option value="aprobado">Aprobado</option>
-              <option value="rechazado">Rechazado</option>
-            </Field>
-            <ErrorMessage
-              name="status"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>          
+            <div>
+              <label>Hora de fin: </label>
+              <Field
+                name="endTime"
+                type="time"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Hora de fin (HH:MM)"
+                disabled={isEdit}
+              />
+              <ErrorMessage
+                name="endTime"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
 
-          <div className="p-d-flex p-gap-3">
-            <Button
-              type="button"
-              label={isEdit ? "Actualizar" : "Crear"}
-              className="p-button-success p-button-rounded"
-              disabled={isSubmitting}
-              onClick={async () => {
-                const errors = await validateForm();
-                if (Object.keys(errors).length) {
-                  // marca todo como "tocado" para que se muestren mensajes de validación
-                  setTouched(
-                    Object.keys(errors).reduce((acc, k) => ({ ...acc, [k]: true }), {}),
-                    true
-                  );
-                  toast.current?.show({
-                    severity: "error",
-                    summary: "Datos inválidos",
-                    detail: "Revisa los campos marcados en el formulario",
-                    life: 2500,
-                  });
-                  return;
-                }
-                await submitForm();
-              }}
-            />              
+            <div>
+              <label>Estado: </label>
+              <Field
+                name="status"
+                as="select"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Estado"
+              >
+                <option value="">Seleccione un estado</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="aprobado">Aprobado</option>
+                <option value="rechazado">Rechazado</option>
+              </Field>
+              <ErrorMessage
+                name="status"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>          
 
-            <Button
-              label="Volver"
-              className="p-button-secondary p-button-rounded"
-              onClick={() => {
-                const fromParam = searchParams.get('from');
-                if (fromParam === 'user-schedules') {
-                  navigate('/usuarios/empleado/horarios');
-                } else if (fromParam === 'schedules') {
-                  navigate('/horarios');
-                } else {
-                  navigate('/solicitudes-horarios');
-                }
-              }}
-              type="button"
-            />
-          </div>
-        </Form>
+            <div className="custom-btn-group">
+              <Button
+                type="button"
+                label={isEdit ? "Actualizar" : "Crear"}
+                className="p-button-success p-button-rounded"
+                disabled={isSubmitting}
+                onClick={async () => {
+                  const errors = await validateForm();
+                  if (Object.keys(errors).length) {
+                    // marca todo como "tocado" para que se muestren mensajes de validación
+                    setTouched(
+                      Object.keys(errors).reduce((acc, k) => ({ ...acc, [k]: true }), {}),
+                      true
+                    );
+                    toast.current?.show({
+                      severity: "error",
+                      summary: "Datos inválidos",
+                      detail: "Revisa los campos marcados en el formulario",
+                      life: 2500,
+                    });
+                    return;
+                  }
+                  await submitForm();
+                }}
+              />              
+
+              <Button
+                label="Volver"
+                className="p-button-secondary p-button-rounded"
+                onClick={() => {
+                  const fromParam = searchParams.get('from');
+                  if (fromParam === 'user-schedules') {
+                    navigate('/usuarios/empleado/horarios');
+                  } else if (fromParam === 'schedules') {
+                    navigate('/horarios');
+                  } else {
+                    navigate('/solicitudes-horarios');
+                  }
+                }}
+                type="button"
+              />
+            </div>
+          </Form>
+
+        </div>
       )}
       </Formik>
     </div>

@@ -116,6 +116,7 @@ export default function EmployeeForm() {
       <Toast ref={toast} />
 
       <h2>{isEdit ? "Editar" : "Crear"} Empleado</h2>
+    
       <Formik
         initialValues={initialValues}
         enableReinitialize
@@ -124,90 +125,93 @@ export default function EmployeeForm() {
       >
         {({ isSubmitting, validateForm, setTouched, submitForm }) => (
 
-        <Form
-          className="p-d-flex p-flex-column p-gap-3"
-          style={{ width: "100%", maxWidth: "400px" }}
-        >
-          <Field name="userId" type="hidden" />
+        <div className="profile-frame">
 
-          <div>
-            <label>Posicion:</label>
-            <Field as="select" name="position">
-                <option value="cajero">Cajero</option>
-                <option value="supervisor">Supervisor</option>
-                <option value="repositor">Repositor</option>
-            </Field>
-            <ErrorMessage
-              name="position"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>          
+          <Form
+            className="custom-form"
+          >
+            <Field name="userId" type="hidden" />
 
-          <div>
-            <label>Fecha de Contratación:</label>
-            <Field
-              name="hiringDate"
-              type="date"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Fecha de Contratación"
-            />
-            <ErrorMessage
-              name="hiringDate"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+            <div>
+              <label>Posicion: </label>
+              <Field as="select" name="position">
+                  <option value="cajero">Cajero</option>
+                  <option value="supervisor">Supervisor</option>
+                  <option value="repositor">Repositor</option>
+              </Field>
+              <ErrorMessage
+                name="position"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>          
 
-          <div>
-            <label>Estado</label>
-            <Field as="select" name="status">
-                <option value={true}>Activo</option>
-                <option value={false}>Inactivo</option>
-            </Field>
-            <ErrorMessage
-              name="status"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>          
+            <div>
+              <label>Fecha de Contratación: </label>
+              <Field
+                name="hiringDate"
+                type="date"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Fecha de Contratación"
+              />
+              <ErrorMessage
+                name="hiringDate"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
 
-          <div className="p-d-flex p-gap-3">
-            <Button
-              type="button"
-              label={isEdit ? "Guardar Cambios" : "Crear Empleado"}
-              className="p-button-success p-button-rounded"
-              disabled={isSubmitting}
-              onClick={async () => {
-                const errors = await validateForm();
-                if (Object.keys(errors).length) {
-                  setTouched(
-                    Object.keys(errors).reduce((acc, key) => ({
-                      ...acc,
-                      [key]: true
-                    }), {}),
-                    true
-                  );
-                  toast.current.show({ 
-                    severity: 'error', 
-                    summary: 'Error', 
-                    detail: 'Por favor corrige los errores del formulario.', 
-                    life: 3000 
-                  });
-                  return;
-                }
-                await submitForm();
-              }}
-            />
+            <div>
+              <label>Estado: </label>
+              <Field as="select" name="status">
+                  <option value={true}>Activo</option>
+                  <option value={false}>Inactivo</option>
+              </Field>
+              <ErrorMessage
+                name="status"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>          
 
-            <Button
-              label="Volver"
-              className="p-button-secondary p-button-rounded"
-              onClick={() => navigate("/empleados")}
-              type="button"
-            />
-          </div>
-        </Form>
+            <div className="custom-btn-group">
+              <Button
+                type="button"
+                label={isEdit ? "Guardar Cambios" : "Crear Empleado"}
+                className="p-button-success p-button-rounded"
+                disabled={isSubmitting}
+                onClick={async () => {
+                  const errors = await validateForm();
+                  if (Object.keys(errors).length) {
+                    setTouched(
+                      Object.keys(errors).reduce((acc, key) => ({
+                        ...acc,
+                        [key]: true
+                      }), {}),
+                      true
+                    );
+                    toast.current.show({ 
+                      severity: 'error', 
+                      summary: 'Error', 
+                      detail: 'Por favor corrige los errores del formulario.', 
+                      life: 3000 
+                    });
+                    return;
+                  }
+                  await submitForm();
+                }}
+              />
+
+              <Button
+                label="Volver"
+                className="p-button-secondary p-button-rounded"
+                onClick={() => navigate("/empleados")}
+                type="button"
+              />
+            </div>
+          </Form>
+
+        </div>
       )}
       </Formik>
     </div>

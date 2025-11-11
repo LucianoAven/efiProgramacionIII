@@ -41,9 +41,11 @@ export default function UsersView() {
           header="Acciones" 
           body={(rowData) => (
             <>
+            {rowData.employees && rowData.employees.length === 0 && (
               <Link to={`/empleados/crear/${rowData.id}`}>
                 <Button label="Alta Empleado" icon="pi pi-eye" className="p-button-rounded p-button-info mr-2" />
               </Link>
+            )}
               <Link to={`/usuarios/editar/${rowData.id}`}>
                 <Button label="Editar rol/estado" icon="pi pi-pencil" className="p-button-rounded p-button-info mr-2" />
               </Link>

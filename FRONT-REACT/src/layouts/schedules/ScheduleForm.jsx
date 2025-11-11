@@ -122,92 +122,95 @@ export default function ScheduleForm() {
 
         {({ validateForm, submitForm, setTouched, isSubmitting }) => (
 
-        <Form
-          className="schedule-form"
-          style={{ width: "100%", maxWidth: "400px" }}
-        >
-          {/* Campo oculto para employeeId */}
-          <Field name="employeeId" type="hidden" />
+        <div className="profile-frame">
 
-          <div>
-            <label>Fecha:</label>
-            <Field
-              name="date"
-              type="date"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Fecha"
-            />
-            <ErrorMessage
-              name="date"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+          <Form
+            className="custom-form"
+          >
+            {/* Campo oculto para employeeId */}
+            <Field name="employeeId" type="hidden" />
 
-          <div>
-            <label>Hora de inicio:</label>
-            <Field
-              name="startTime"
-              type="time"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Hora de inicio (HH:MM)"
-            />
-            <ErrorMessage
-              name="startTime"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+            <div>
+              <label>Fecha: </label>
+              <Field
+                name="date"
+                type="date"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Fecha"
+              />
+              <ErrorMessage
+                name="date"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
 
-          <div>
-            <label>Hora de fin:</label>
-            <Field
-              name="endTime"
-              type="time"
-              className="p-inputtext p-component p-mb-3"
-              placeholder="Hora de fin (HH:MM)"
-            />
-            <ErrorMessage
-              name="endTime"
-              component="div"
-              className="p-text-danger"
-            />
-          </div>
+            <div>
+              <label>Hora de inicio: </label>
+              <Field
+                name="startTime"
+                type="time"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Hora de inicio (HH:MM)"
+              />
+              <ErrorMessage
+                name="startTime"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
+  
+            <div>
+              <label>Hora de fin: </label>
+              <Field
+                name="endTime"
+                type="time"
+                className="p-inputtext p-component p-mb-3"
+                placeholder="Hora de fin (HH:MM)"
+              />
+              <ErrorMessage
+                name="endTime"
+                component="div"
+                className="p-text-danger"
+              />
+            </div>
 
-          <div className="p-d-flex p-gap-3">
-            <Button
-              type="button"
-              label={isEdit ? "Actualizar" : "Crear"}
-              className="p-button-success p-button-rounded"
-              disabled={isSubmitting}
-              onClick={async () => {
-                const errors = await validateForm();
-                if (Object.keys(errors).length) {
-                  // marca todo como "tocado" para que se muestren mensajes de validación
-                  setTouched(
-                    Object.keys(errors).reduce((acc, k) => ({ ...acc, [k]: true }), {}),
-                    true
-                  );
-                  toast.current?.show({
-                    severity: "error",
-                    summary: "Datos inválidos",
-                    detail: "Revisa los campos marcados en el formulario",
-                    life: 2500,
-                  });
-                  return;
-                }
-                await submitForm();
-              }}
-            />              
+            <div className="custom-btn-group">
+              <Button
+                type="button"
+                label={isEdit ? "Actualizar" : "Crear"}
+                className="p-button-success p-button-rounded"
+                disabled={isSubmitting}
+                onClick={async () => {
+                  const errors = await validateForm();
+                  if (Object.keys(errors).length) {
+                    // marca todo como "tocado" para que se muestren mensajes de validación
+                    setTouched(
+                      Object.keys(errors).reduce((acc, k) => ({ ...acc, [k]: true }), {}),
+                      true
+                    );
+                    toast.current?.show({
+                      severity: "error",
+                      summary: "Datos inválidos",
+                      detail: "Revisa los campos marcados en el formulario",
+                      life: 2500,
+                    });
+                    return;
+                  }
+                  await submitForm();
+                }}
+              />              
 
-            <Button
-              label="Volver"
-              className="p-button-secondary p-button-rounded"
-              onClick={() => navigate("/horarios")}
-              type="button"
-            />
-          </div>
-        </Form>
+              <Button
+                label="Volver"
+                className="p-button-secondary p-button-rounded"
+                onClick={() => navigate("/horarios")}
+                type="button"
+              />
+            </div>
+          </Form>
+
+        </div>
       )}
       </Formik>
     </div>

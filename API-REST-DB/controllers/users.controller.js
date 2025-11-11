@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, Employee } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -67,7 +67,14 @@ const login = async (req, res) => {
 // Obtener todos los usuarios
 const getUsers = async (req, res) => {
     try {
-        const usuarios = await User.findAll();
+          const includeUser = {
+                    model: Employee,
+                    as: 'employees',
+                    attributes: ['id', 'userId', 'position'],
+                };
+        const usuarios = await User.findAll({
+            include: includeUser
+        });
         res.json({ status: 200, data: usuarios });
     } catch (error) {
         res.status(500).json({ status: 500, message: 'Error al obtener usuarios', error: error.message });
