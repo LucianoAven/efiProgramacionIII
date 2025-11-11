@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+const sequelize = require('./db/db');
+
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -26,8 +28,14 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
 
-/*
+sequelize.authenticate()
+  .then(() => console.log('✅ Conexión a la base de datos establecida correctamente.'))
+  .catch(err => console.error('❌ Error al conectar con la base de datos:', err));
+
+  /*
 app.listen(port, () => {
     console.log(`servidor corriendo en localhost:${port}`)
 })  
 */
+
+
