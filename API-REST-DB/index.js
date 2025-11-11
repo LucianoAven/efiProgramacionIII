@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+console.log("🔍 Variables de entorno:", process.env.DB_HOST, process.env.DB_USER, process.env.DB_NAME);
+
 const sequelize = require('./db/db');
 
 const express = require('express')
