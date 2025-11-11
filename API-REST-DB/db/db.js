@@ -1,5 +1,23 @@
-const { Sequelize } = require('sequelize')
+const { Sequelize } = require('sequelize');
 
+// Usar variables de entorno (definidas en Render)
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT || 3306, // por si no está definida
+    dialect: 'mysql',
+    logging: false, // opcional, evita mostrar logs SQL
+  }
+);
+
+module.exports = sequelize;
+
+
+/* 
+const { Sequelize } = require('sequelize')
 
 const sequelize = new Sequelize('crud_db', 'root', 'root1234', {
     host: 'localhost',
@@ -7,3 +25,4 @@ const sequelize = new Sequelize('crud_db', 'root', 'root1234', {
 })
 
 module.exports = sequelize
+ */
