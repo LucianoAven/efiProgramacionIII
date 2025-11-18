@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
 // Usar variables de entorno (definidas en Render)
 const sequelize = new Sequelize(
@@ -9,7 +10,15 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 3306, // por si no está definida
     dialect: 'mysql',
-    logging: false, // opcional, evita mostrar logs SQL
+
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    },
+
+    logging: console.log, // opcional, evita mostrar logs SQL
   }
 );
 
