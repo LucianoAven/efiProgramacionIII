@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
+
 // Usar variables de entorno (definidas en Render)
 const sequelize = new Sequelize(
   process.env.DB_NAME,
