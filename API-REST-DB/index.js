@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+console.log("🔍 Variables de entorno:", process.env.DB_HOST, process.env.DB_USER, process.env.DB_NAME);
+
 const sequelize = require('./db/db');
 
 const express = require('express')
@@ -28,14 +30,30 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);
 });
 
+/*
 sequelize.authenticate()
   .then(() => console.log('✅ Conexión a la base de datos establecida correctamente.'))
   .catch(err => console.error('❌ Error al conectar con la base de datos:', err));
 
-  /*
 app.listen(port, () => {
     console.log(`servidor corriendo en localhost:${port}`)
 })  
 */
+
+
+sequelize.authenticate()
+  .then(() => {
+    console.log('✅ Conexión a la base de datos establecida correctamente.');
+
+    // 🔽 Esto crea las tablas automáticamente si no existen
+    return sequelize.sync();
+  })
+  .then(() => {
+    console.log('✅ Tablas sincronizadas correctamente.');
+  })
+  .catch(err => {
+    console.error('❌ Error al conectar con la base de datos o sincronizar:', err);
+  });
+
 
 
