@@ -1,6 +1,10 @@
 require('dotenv').config()
 
-console.log("🔍 Variables de entorno:", process.env.DB_HOST, process.env.DB_USER, process.env.DB_NAME);
+console.log("Variables de entorno:", process.env.DB_HOST, process.env.DB_USER, process.env.DB_NAME);
+
+sequelize.sync({ alter: true }) 
+  .then(() => console.log("Tablas creadas"))
+  .catch(err => console.error(err));
 
 const sequelize = require('./db/db');
 
