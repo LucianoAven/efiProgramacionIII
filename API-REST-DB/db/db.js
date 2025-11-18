@@ -3,6 +3,7 @@ require('dotenv').config();
 
 
 // Usar variables de entorno (definidas en Render)
+/* 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -22,17 +23,14 @@ const sequelize = new Sequelize(
     logging: console.log, // opcional, evita mostrar logs SQL
   }
 );
-
+ 
 module.exports = sequelize;
+*/
 
 
-/* 
-const { Sequelize } = require('sequelize')
-
-const sequelize = new Sequelize('crud_db', 'root', 'root1234', {
+const sequelize = new Sequelize('crud_db3', 'root', 'root1234', {
     host: 'localhost',
     dialect: 'mysql'
 })
 
 module.exports = sequelize
- */
