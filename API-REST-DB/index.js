@@ -4,9 +4,9 @@ console.log("Variables de entorno:", process.env.DB_HOST, process.env.DB_USER, p
 
 const sequelize = require('./db/db');
 
-// Crear tablas automáticamente en producción
-sequelize.sync({ force: false, alter: true })
-  .then(() => console.log("✅ Tablas sincronizadas correctamente"))
+// FORZAR creación de tablas en producción (temporal)
+sequelize.sync({ force: true, alter: true })
+  .then(() => console.log("✅ Tablas creadas correctamente"))
   .catch(err => console.error("❌ Error creando tablas:", err));
 
 const express = require('express')
