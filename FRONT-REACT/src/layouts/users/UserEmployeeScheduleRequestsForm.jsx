@@ -176,7 +176,7 @@ export default function UserEmployeeScheduleRequestForm() {
         <div className="profile-frame">
 
           <Form
-            className="custom-form"
+            className="scheduleRequest-form custom-schedule-form"
           >
             {/* Campo oculto para employeeId */}
             <Field name="employeeId" type="hidden" />
@@ -243,7 +243,7 @@ export default function UserEmployeeScheduleRequestForm() {
               />
             </div>          
 
-            <div className="custom-btn-group">
+            <div className="custom-schedule-btn-group">
               <Button
                 type="button"
                 label={isEdit ? "Actualizar" : "Crear"}

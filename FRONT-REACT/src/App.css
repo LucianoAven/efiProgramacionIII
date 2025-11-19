@@ -240,22 +240,46 @@ form, .product-form, .form-vertical { text-align: left; }
   opacity: 0.8;
 }
 
-/* Formulario de solicitud de horario personalizado */
-.custom-form {
+/* Estilos para el formulario de solicitudes de horarios */
+.custom-schedule-form {
+  width: 100% !important;
+  max-width: 400px !important;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  text-align: left;
 }
 
-.custom-form label {
-  margin-bottom: 4px;
+.custom-schedule-form > div:not(.custom-schedule-btn-group) {
+  margin-bottom: 1.5rem;
+}
+
+.custom-schedule-form label {
+  display: block;
+  margin-bottom: 0.5rem;
   font-weight: 500;
+  color: #333;
 }
 
-.custom-btn-group {
+.custom-schedule-form .p-inputtext,
+.custom-schedule-form select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.custom-schedule-form .p-text-danger {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.custom-schedule-btn-group {
   display: flex;
   gap: 1rem;
   justify-content: center;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+}
+
+.custom-schedule-btn-group .p-button {
+  padding: 0.75rem 1.5rem;
 }
